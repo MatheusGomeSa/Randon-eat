@@ -2,9 +2,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+    Nameuser:string,
+    idUser:number
+    Tags: string,    
 }
 
 export default (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  res.status(200).json({ name: 'John Doe' })
+  let data = {Nameuser: 'John Doe',
+              idUser:1,
+              Tags:'[A01,1],[A02,2],[A78,3]'}
+  
+
+
+
+  res.status(200).json(data)
 }
