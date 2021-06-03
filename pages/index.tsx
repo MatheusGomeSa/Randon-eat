@@ -1,3 +1,4 @@
+import { isTargetLikeServerless } from 'next/dist/next-server/server/config';
 import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -6,64 +7,89 @@ import styles from '../styles/Home.module.css'
 
 export default function Home() {
   interface Itens{
-    name:String,
-    quantidade:Number,
-    id: Number
+    name:string,
+    quantidade:number,
+    id: number
   }
   interface Receitas{
-    name:String,
-    ingredientes:[string]
-    quantidade:[number],
+    name:string,
+    ingredientes:Array<string>,
+    quantidade:Array<string>
     linkTo:string  }
 
   const [pages,Setpages ] = useState(1);
 
-    function haveonlist(L:[Itens],r:Receitas){
+    function haveonlist(L:Array<Itens>,r:Receitas){
       let list = [];
       let ing = r.ingredientes;
-      let have = false
       for(let h of L ) { list.push(h.name)}
+      let contador = ing.length 
       
-      for(let i=0;i<=ing.length; ){
-        for(let l=0;l<=list.length; l++){
-          if(ing[i] === list[l]){
-            ing.shift();
-            list = list.slice(l);
-            have = true
-          }
+      for(let i=0;i<=contador;i++){
+        let teste = list.find(e => e == ing[0]);
+        if(teste){
+          ing.shift();
         }
-        if(!have)
-        {
-          return;
-        }
-        have = false;
       }
-      return r
+      if(ing.length == 0){
+        console.log('Funcionou')
+        return true;
+      }else{
+        return false;
+      }
     }
 
 
-    const Lista = [
-      {name:'Açucar',
-       quantidade:1,
-        id:12232},
+    const Lista:Array<Itens> = [
         {
           name:'Arroz',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'margarina',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'maizena',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'ovo',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'açucar',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'farinha de trigo',
+          quantidade:2,
+          id:23352
+        },
+        {
+          name:'amido de milho',
           quantidade:2,
           id:23352
         }
       ]
       
     const receitas = [
-      {name:'Biscoito-casadinho',
-      ingredientes:['margarina','ovo','farinha de trigo','amido de milho','açúcar'],
-      quantidade:['150g','2','2 xícaras','1 xícara','1 xícara e 1/2',],
-      linkTo:'https://www.tudogostoso.com.br/receita/65455-biscoito-casadinho.html'
-    },
-    {name:'Biscoito-de-maizena',
+      {name:'Biscoito-de-maizena',
       ingredientes:['maizena','margarina','ovo','açucar'],
       quantidade:['200g','100g','1','4 colheres de sopa'],
       linkTo:'https://www.tudogostoso.com.br/receita/51310-biscoito-de-maizena.html'
+    },
+      {name:'Biscoito-casadinho',
+      ingredientes:['margarina','ovo','farinha de trigo','amido de milho','açucar'],
+      quantidade:['150g','2','2 xícaras','1 xícara','1 xícara e 1/2',],
+      linkTo:'https://www.tudogostoso.com.br/receita/65455-biscoito-casadinho.html'
     }
+    
     ]
      return (
     <div>
@@ -86,17 +112,17 @@ export default function Home() {
         {(pages == 2) &&(
           <div>
             <section className='grid grid-cols-2 lg:grid-cols-4 gap-4'><div className='col-span-2 lg:col-span-4'>Café da Manhã</div>
-              {receitas.map(use => <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div>)}
+              {receitas.map(use => haveonlist(Lista,use)? <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div> : '')}
             </section>
 
             <section className='grid grid-cols-2 lg:grid-cols-4 gap-4'><div className='col-span-2 lg:col-span-4'>Almoço</div>
-            {receitas.map(use => <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div>)}
+            {receitas.map(use => haveonlist(Lista,use)? <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div> : '')}
             </section>
             <section className='grid grid-cols-2 lg:grid-cols-4 gap-4'><div className='col-span-2 lg:col-span-4'>Café da tarde</div>
-            {receitas.map(use => <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div>)}
+            {receitas.map(use => haveonlist(Lista,use)? <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div> : '')}
             </section >
             <section className='grid grid-cols-2 lg:grid-cols-4 gap-4'><div className='col-span-2 lg:col-span-4'>Jantar</div>
-            {receitas.map(use => <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div>)}
+            {receitas.map(use => haveonlist(Lista,use)? <div className='h-44 w-48 border border-black bg-primary'><div className='h-1/3 w-full border border-black bg-secundary'>{use.name}</div><div></div></div> : '')}
             </section>
           
           </div>
